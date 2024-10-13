@@ -17,17 +17,18 @@ class RoomsCubit extends Cubit<RoomsState> {
   final myUid = FireBaseData().myUid;
 
   StreamSubscription<List<Room>>? _chatRoomsSubscription;
+  StreamSubscription<List<UserProfile>>? _usersSubscription;
+
   List<UserProfile> _cachedUsers = [];
 
   Future<void> fetchAllData() async {
     emit(HomeLoading());
     try {
-      _firebaseService.fetchAllUsers().listen((users) {
+      _usersSubscription = _firebaseService.fetchAllUsers().listen((users) {
         _cachedUsers = users;
         print('Fetched users: ${_cachedUsers.map((user) => user.id).toList()}');
-
-        _firebaseService.getAllChats().listen((rooms) {
-          emit(HomeLoaded(rooms, _cachedUsers));
+        _chatRoomsSubscription = _firebaseService.getAllChats().listen((rooms) {
+          emit(HomeLoaded(rooms));
         });
       });
     } catch (e) {
@@ -71,6 +72,7 @@ class RoomsCubit extends Cubit<RoomsState> {
   @override
   Future<void> close() {
     _chatRoomsSubscription?.cancel();
+    _usersSubscription?.cancel();
     return super.close();
   }
 }
