@@ -13,9 +13,7 @@ class UsersCubit extends Cubit<UsersState> {
   final FireBaseData _firebaseService;
 
   UsersCubit(this._firebaseService) : super(UsersInitial());
-
   StreamSubscription<List<UserProfile>>? _usersSubscription;
-
   void fetchAllUsers() {
     emit(UserLoading());
     _usersSubscription = _firebaseService.fetchAllUsersWithoutme().listen(
@@ -23,7 +21,8 @@ class UsersCubit extends Cubit<UsersState> {
         emit(UserLoaded(users));
       },
       onError: (e) {
-        emit(UserError(e.toString())); // Handle errors
+        emit(UserError(e.toString()));
+        // Handle errors
       },
     );
   }

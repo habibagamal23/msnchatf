@@ -7,9 +7,7 @@ import '../../features/register/model/user_info.dart';
 class FireBaseData {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   String get myUid => _auth.currentUser!.uid;
-
   Future<void> createUserProfile(UserProfile userProfile) async {
     try {
       await _firestore
@@ -40,5 +38,4 @@ class FireBaseData {
           .toList();
     });
   }
-
 }

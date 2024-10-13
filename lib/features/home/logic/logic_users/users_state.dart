@@ -12,11 +12,6 @@ class UserLoaded extends UsersState {
   UserLoaded(this.users);
 }
 
-class UserProfileLoaded extends UsersState {
-  final UserProfile userProfile;
-  UserProfileLoaded(this.userProfile);
-}
-
 class UserError extends UsersState {
   final String message;
   UserError(this.message);
