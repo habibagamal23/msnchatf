@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/network_services/firebase_sevice.dart';
 import '../../../core/utils/styles.dart';
 import '../../../core/utils/routes.dart';
-import '../logic/logic_users/users_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -47,7 +46,6 @@ class HomeScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           backgroundColor: ColorsManager.mainBlue,
           onPressed: () {
-            context.read<UsersCubit>().fetchAllUsers();
             Navigator.pushNamed(context, Routes.selectUserScreen);
           },
           child: const Icon(

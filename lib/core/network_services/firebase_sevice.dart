@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../../features/home/model/roomModel.dart';
 import '../../features/login/model/login_model.dart';
 import '../../features/register/model/register_model.dart';
-import '../../features/register/model/user_info.dart';
+import '../../features/home/model/user_info.dart';
 import 'fireBase_data.dart';
 
 class FirebaseService {
@@ -63,7 +62,7 @@ class FirebaseService {
           pushToken: 'example-push-token',
         );
 
-        await FireBaseData().createUserProfile(userProfile);
+        // create user
       }
 
       return user;
@@ -130,18 +129,19 @@ class FirebaseService {
       if (userCredential.additionalUserInfo!.isNewUser) {
         User? user = userCredential.user;
         if (user != null) {
-          await FireBaseData().createUserProfile(UserProfile(
-            id: user.uid,
-            name: user.displayName ?? "New User",
-            email: user.email ?? "",
-            phoneNumber:
-                "from gooogle",
-            createdAt: DateTime.now().toIso8601String(),
-            about: "I'm a new user",
-            online: true,
-            lastActivated: DateTime.now().toIso8601String(),
-            pushToken: 'example-push-token',
-          ));
+          //create user
+          // await FireBaseData().createUserProfile(UserProfile(
+          //   id: user.uid,
+          //   name: user.displayName ?? "New User",
+          //   email: user.email ?? "",
+          //   phoneNumber:
+          //       "from gooogle",
+          //   createdAt: DateTime.now().toIso8601String(),
+          //   about: "I'm a new user",
+          //   online: true,
+          //   lastActivated: DateTime.now().toIso8601String(),
+          //   pushToken: 'example-push-token',
+          // ));
         }
       }
       return userCredential.user;

@@ -1,52 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:msnchat/features/register/model/user_info.dart';
+import 'package:msnchat/features/home/model/user_info.dart';
 
 import '../../../core/utils/styles.dart';
-import '../logic/logic_users/users_cubit.dart';
 
 class SelectUserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 80,
-        title: const Text(
-          "All Users",
-          style: TextStyle(
-            color: ColorsManager.mainBlue,
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
+        appBar: AppBar(
+          toolbarHeight: 80,
+          title: const Text(
+            "All Users",
+            style: TextStyle(
+              color: ColorsManager.mainBlue,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
           ),
+          centerTitle: true,
+          automaticallyImplyLeading: true,
         ),
-        centerTitle: true,
-        automaticallyImplyLeading: true,
-      ),
-      body: BlocBuilder<UsersCubit, UsersState>(
-        builder: (context, state) {
-          if (state is UserLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state is UserLoaded) {
-            return ListView.builder(
-              itemCount: state.users.length,
-              itemBuilder: (context, index) {
-                final user = state.users[index];
-                return CardSelectedUsers(userProfile: user);
-              },
-            );
-          }
-
-          if (state is UserError) {
-            return Center(child: Text('Error: ${state.message}'));
-          }
-
-          return const Center(child: Text('No users available'));
-        },
-      ),
-    );
+        body: Center(
+          child: Text("creat user"),
+        ));
   }
 }
 
