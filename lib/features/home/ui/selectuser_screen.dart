@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:msnchat/features/home/logic_user/users_cubit.dart';
 import 'package:msnchat/features/home/model/user_info.dart';
 
 import '../../../core/utils/styles.dart';
@@ -22,9 +23,27 @@ class SelectUserScreen extends StatelessWidget {
           centerTitle: true,
           automaticallyImplyLeading: true,
         ),
-        body: Center(
-          child: Text("creat user"),
-        ));
+        body: BlocBuilder<UsersCubit, UsersState>(builder: (context, state) {
+          if (state is UsersLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (state is UsersLoaded) {
+            return ListView.builder(
+                itemCount: state.users.length,
+                itemBuilder: (context, index) {
+                  final user = state.users[index];
+                  return CardSelectedUsers(
+                    userProfile: user,
+                  );
+                });
+          }
+
+          if (state is UsersError) {
+            return Center(child: Text("erro ${state.errormass}"));
+          }
+          return Center(child: Text("no users"));
+        }));
   }
 }
 

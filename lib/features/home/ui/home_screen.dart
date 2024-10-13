@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:msnchat/features/home/logic_user/users_cubit.dart';
 
 import '../../../core/network_services/firebase_sevice.dart';
 import '../../../core/utils/styles.dart';
@@ -46,7 +47,10 @@ class HomeScreen extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: ColorsManager.mainBlue,
-          onPressed: () {},
+          onPressed: () {
+            context.read<UsersCubit>().fetchAlluserWithoutme();
+            Navigator.pushNamed(context, Routes.selectUserScreen);
+          },
           child: const Icon(
             Icons.chat,
             color: ColorsManager.whitebeg,

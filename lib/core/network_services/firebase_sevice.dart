@@ -48,21 +48,18 @@ class FirebaseService {
       );
 
       User? user = userCredential.user;
-
       if (user != null) {
         UserProfile userProfile = UserProfile(
-          id: user.uid,
-          name: requestBody.name,
-          email: requestBody.email,
-          phoneNumber: requestBody.phoneNumber,
-          createdAt: DateTime.now().toIso8601String(),
-          about: "New user",
-          online: true,
-          lastActivated: DateTime.now().toIso8601String(),
-          pushToken: 'example-push-token',
-        );
-
-        // create user
+            id: user.uid,
+            name: requestBody.name,
+            email: requestBody.email,
+            about: "is new user ",
+            phoneNumber: requestBody.phoneNumber,
+            createdAt: DateTime.now().toIso8601String(),
+            lastActivated: DateTime.now().toIso8601String(),
+            pushToken: "",
+            online: true);
+        await FireBaseData().creatUser(userProfile);
       }
 
       return user;
@@ -124,19 +121,17 @@ class FirebaseService {
       if (userCredential.additionalUserInfo!.isNewUser) {
         User? user = userCredential.user;
         if (user != null) {
-          //create user
-          // await FireBaseData().createUserProfile(UserProfile(
-          //   id: user.uid,
-          //   name: user.displayName ?? "New User",
-          //   email: user.email ?? "",
-          //   phoneNumber:
-          //       "from gooogle",
-          //   createdAt: DateTime.now().toIso8601String(),
-          //   about: "I'm a new user",
-          //   online: true,
-          //   lastActivated: DateTime.now().toIso8601String(),
-          //   pushToken: 'example-push-token',
-          // ));
+          await FireBaseData().creatUser(UserProfile(
+            id: user.uid,
+            name: user.displayName ?? "New User",
+            email: user.email ?? "",
+            phoneNumber: "000000000000",
+            createdAt: DateTime.now().toIso8601String(),
+            about: "I'm a new user",
+            online: true,
+            lastActivated: DateTime.now().toIso8601String(),
+            pushToken: 'example-push-token',
+          ));
         }
       }
       return userCredential.user;
