@@ -13,101 +13,99 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RoomsCubit(FireBaseData())..fetchAllData(),
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.settings,
-                color: ColorsManager.mainBlue,
-              )),
-          toolbarHeight: 80,
-          title: const Text(
-            "Chats Screen",
-            style: TextStyle(
-                color: ColorsManager.mainBlue,
-                fontSize: 30,
-                fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.logout,
-                color: ColorsManager.mainBlue,
-              ),
-              onPressed: () async {
-                await FirebaseService().logout();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  Routes.loginScreen,
-                  (route) => false,
-                );
-              },
+        create: (context) => RoomsCubit(FireBaseData())..fetchAllData(),
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.settings,
+                  color: ColorsManager.mainBlue,
+                )),
+            toolbarHeight: 80,
+            title: const Text(
+              "Chats Screen",
+              style: TextStyle(
+                  color: ColorsManager.mainBlue,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold),
             ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: ColorsManager.mainBlue,
-          onPressed: () {
-            context.read<UsersCubit>().fetchAllUsers();
-            Navigator.pushNamed(context, Routes.selectUserScreen);
-          },
-          child: const Icon(
-            Icons.chat,
-            color: ColorsManager.whitebeg,
+            centerTitle: true,
+            automaticallyImplyLeading: false,
+            actions: [
+              IconButton(
+                icon: const Icon(
+                  Icons.logout,
+                  color: ColorsManager.mainBlue,
+                ),
+                onPressed: () async {
+                  await FirebaseService().logout();
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    Routes.loginScreen,
+                    (route) => false,
+                  );
+                },
+              ),
+            ],
           ),
-        ),
-        body: BlocBuilder<RoomsCubit, RoomsState>(
-          builder: (context, state) {
-            if (state is HomeLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            if (state is HomeLoaded) {
-              if (state.rooms.isEmpty) {
-                return const Center(child: Text("No chats available"));
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: ColorsManager.mainBlue,
+            onPressed: () {
+              context.read<UsersCubit>().fetchAllUsers();
+              Navigator.pushNamed(context, Routes.selectUserScreen);
+            },
+            child: const Icon(
+              Icons.chat,
+              color: ColorsManager.whitebeg,
+            ),
+          ),
+          body: BlocBuilder<RoomsCubit, RoomsState>(
+            builder: (context, state) {
+              if (state is HomeLoading) {
+                return const Center(child: CircularProgressIndicator());
               }
 
-              return ListView.builder(
-                itemCount: state.rooms.length,
-                itemBuilder: (context, index) {
-                  final chatRoom = state.rooms[index];
+              if (state is HomeLoaded) {
+                if (state.rooms.isEmpty) {
+                  return const Center(child: Text("No chats available"));
+                }
 
-                  // Safely find the other user in the room
-                  final otherUserId = chatRoom.members.firstWhere(
-                    (id) => id != FireBaseData().myUid,
-                    orElse: () =>
-                        'Unknown', // Provide a fallback value if no other user is found
-                  );
+                return ListView.builder(
+                  itemCount: state.rooms.length,
+                  itemBuilder: (context, index) {
+                    final chatRoom = state.rooms[index];
 
-                  // Fetch the user profile from the cached users in HomeCubit
-                  final userProfile =
-                      context.read<RoomsCubit>().getUserProfile(otherUserId);
-
-                  if (otherUserId == 'Unknown' || userProfile == null) {
-                    return ListTile(
-                      leading: const Icon(Icons.person),
-                      title: const Text('No other user found'),
-                      subtitle: const Text('Room contains only your ID'),
+                    // Fetch the other user in the room
+                    final otherUserId = chatRoom.members.firstWhere(
+                      (id) => id != FireBaseData().myUid,
+                      orElse: () => 'Unknown', // Fallback in case of error
                     );
-                  }
 
-                  return UserCard(userProfile: userProfile);
-                },
-              );
-            }
+                    // You may want to fetch additional user data using otherUserId
+                    return ListTile(
+                      title: Text('Chat Room: ${chatRoom.id}'),
+                      subtitle: Text(
+                        'Created at: ${chatRoom.createdAt}',
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                      onTap: () {
+                        // Handle navigation to chat room
+                        print('Tapped on room: ${chatRoom.id}');
+                      },
+                    );
+                  },
+                );
+              }
 
-            if (state is HomeError) {
-              return Center(child: Text('Error: ${state.message}'));
-            }
+              if (state is HomeError) {
+                return Center(child: Text('Error: ${state.message}'));
+              }
 
-            return const Center(child: Text("No chats available"));
-          },
-        ),
-      ),
-    );
+              return const Center(child: Text("No chats available"));
+            },
+          ),
+        ));
   }
 }

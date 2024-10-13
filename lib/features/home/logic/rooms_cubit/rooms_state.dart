@@ -14,8 +14,7 @@ class ChatRoomCreated extends RoomsState {
 
 class HomeLoaded extends RoomsState {
   final List<Room> rooms;
-  final List<UserProfile> users;
-  HomeLoaded(this.rooms, this.users);
+  HomeLoaded(this.rooms);
 }
 
 class HomeError extends RoomsState {

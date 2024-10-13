@@ -17,18 +17,12 @@ class RoomsCubit extends Cubit<RoomsState> {
   final myUid = FireBaseData().myUid;
 
   StreamSubscription<List<Room>>? _chatRoomsSubscription;
-  List<UserProfile> _cachedUsers = [];
 
-  Future<void> fetchAllData() async {
+  fetchAllData() async {
     emit(HomeLoading());
     try {
-      _firebaseService.fetchAllUsers().listen((users) {
-        _cachedUsers = users;
-        print('Fetched users: ${_cachedUsers.map((user) => user.id).toList()}');
-
-        _firebaseService.getAllChats().listen((rooms) {
-          emit(HomeLoaded(rooms, _cachedUsers));
-        });
+      _chatRoomsSubscription = _firebaseService.getAllChats().listen((rooms) {
+        emit(HomeLoaded(rooms));
       });
     } catch (e) {
       emit(HomeError('Error fetching data: $e'));
@@ -43,28 +37,6 @@ class RoomsCubit extends Cubit<RoomsState> {
     } catch (e) {
       print('Error creating room: $e');
       emit(HomeError(e.toString()));
-    }
-  }
-
-  UserProfile? getUserProfile(String userId) {
-    try {
-      return _cachedUsers.firstWhere(
-        (user) => user.id == userId,
-        orElse: () => UserProfile(
-          id: "",
-          name: "Unknown User",
-          email: "",
-          about: "",
-          phoneNumber: "",
-          createdAt: "",
-          lastActivated: "",
-          pushToken: "",
-          online: false,
-        ),
-      );
-    } catch (e) {
-      print('User not found: $userId');
-      return null;
     }
   }
 
