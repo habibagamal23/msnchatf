@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../features/forget_pass/ui/ForgetScreen.dart';
+import '../../features/home/ui/alluserscreen.dart';
 import '../../features/home/ui/home_screen.dart';
 import '../../features/login/ui/login_screen.dart';
 import '../../features/onboarding/ui/onboarding_screen.dart';
@@ -13,6 +14,8 @@ class Routes {
   static const String signUpScreen = '/signUpScreen';
   static const String homeScreen = '/homeScreen';
   static const String forgetpass = '/forgetpass';
+  static const String selectUserScreen ='/SelectUserScreen';
+
 }
 
 class AppRouter {
@@ -39,6 +42,10 @@ class AppRouter {
       case Routes.homeScreen:
         return MaterialPageRoute(
           builder: (_) => HomeScreen(),
+        );
+      case Routes.selectUserScreen:
+        return MaterialPageRoute(
+          builder: (_) => SelectUserScreen(),
         );
       default:
         return MaterialPageRoute(

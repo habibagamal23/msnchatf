@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,7 +5,6 @@ import '../../../core/network_services/firebase_sevice.dart';
 import '../../../core/utils/styles.dart';
 import '../../../core/utils/routes.dart';
 import '../logic/logic_users/users_cubit.dart';
-import 'alluserscreen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -16,12 +13,12 @@ class HomeScreen extends StatelessWidget {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {},
-              icon: Icon(
+              icon: const Icon(
                 Icons.settings,
                 color: ColorsManager.mainBlue,
               )),
           toolbarHeight: 80,
-          title: Text(
+          title: const Text(
             "Chats Screen",
             style: TextStyle(
                 color: ColorsManager.mainBlue,
@@ -51,12 +48,7 @@ class HomeScreen extends StatelessWidget {
           backgroundColor: ColorsManager.mainBlue,
           onPressed: () {
             context.read<UsersCubit>().fetchAllUsers();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SelectUserScreen(),
-              ),
-            );
+            Navigator.pushNamed(context, Routes.selectUserScreen);
           },
           child: const Icon(
             Icons.chat,

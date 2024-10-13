@@ -20,7 +20,7 @@ class UsersCubit extends Cubit<UsersState> {
     emit(UserLoading());
     _usersSubscription = _firebaseService.fetchAllUsersWithoutme().listen(
       (users) {
-        emit(UserLoaded(users)); // Emit the list of users
+        emit(UserLoaded(users));
       },
       onError: (e) {
         emit(UserError(e.toString())); // Handle errors
@@ -30,7 +30,7 @@ class UsersCubit extends Cubit<UsersState> {
 
   @override
   Future<void> close() {
-    _usersSubscription?.cancel(); // Clean up the stream subscription
+    _usersSubscription?.cancel();
     return super.close();
   }
 }

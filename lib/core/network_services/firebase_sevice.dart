@@ -109,61 +109,53 @@ class FirebaseService {
 
   Future<User?> registerWithGoogle() async {
     try {
-      // Initiate the Google sign-in process
       await _googleSignIn.signOut();
 
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) {
-        return null; // User canceled the Google sign-in
+        return null;
       }
 
-      // Get the authentication details from Google
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
-      // Create Firebase credential using the Google account credentials
       final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
         accessToken: googleAuth.accessToken,
       );
 
-      // Use the credential to sign in to Firebase
       final userCredential = await _auth.signInWithCredential(credential);
 
-      // If the user is new, create their profile in Firestore
       if (userCredential.additionalUserInfo!.isNewUser) {
         User? user = userCredential.user;
         if (user != null) {
-          // Create a new user profile with information from the Google account
           await FireBaseData().createUserProfile(UserProfile(
             id: user.uid,
-            name: user.displayName ??
-                "New User", // Use display name from Google account
-            email: user.email ?? "", // Use email from Google account
-            phoneNumber: "", // Google doesn't provide phone number by default
+            name: user.displayName ?? "New User",
+            email: user.email ?? "",
+            phoneNumber:
+                "from gooogle",
             createdAt: DateTime.now().toIso8601String(),
             about: "I'm a new user",
             online: true,
             lastActivated: DateTime.now().toIso8601String(),
-            pushToken: 'example-push-token', // This would be populated later
+            pushToken: 'example-push-token',
           ));
         }
       }
-      return userCredential.user; // Return the signed-in user
+      return userCredential.user;
     } catch (e) {
       print('Google registration error: $e');
-      return null; // Return null if there was an error
+      return null;
     }
   }
 
   Future<void> logout() async {
     try {
-      // First try to sign out from Google if signed in
       if (await _googleSignIn.isSignedIn()) {
         await _googleSignIn.signOut();
       }
-      // Then sign out from Firebase
       await _auth.signOut();
     } catch (e) {
       print('Error logging out: $e');
