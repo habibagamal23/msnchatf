@@ -5,6 +5,7 @@ import 'package:msnchat/features/home/logic_user/users_cubit.dart';
 import 'package:msnchat/features/home/model/user_info.dart';
 
 import '../../../core/utils/styles.dart';
+import '../logic_user/logic_rooms/rooms_cubit.dart';
 
 class SelectUserScreen extends StatelessWidget {
   @override
@@ -85,6 +86,7 @@ class CardSelectedUsers extends StatelessWidget {
         tileColor: ColorsManager.mainBlue,
         selectedTileColor: ColorsManager.lightblue,
         onTap: () {
+          context.read<RoomsCubit>().createRoom(userProfile.id);
           Navigator.pop(context);
         },
       ),

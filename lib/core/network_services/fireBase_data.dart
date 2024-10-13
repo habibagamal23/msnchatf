@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../features/home/model/roomModel.dart';
 import '../../features/home/model/user_info.dart';
 
 class FireBaseData {
@@ -36,5 +37,40 @@ class FireBaseData {
           .where((user) => user.id != myUid)
           .toList();
     });
+  }
+
+  Future createRoom(String userId) async {
+    try {
+      CollectionReference chatroom = await _firestor.collection('rooms');
+
+      final sortedmemers = [myUid, userId]..sort((a, b) => a.compareTo(b));
+
+      QuerySnapshot existChatrooom =
+          await chatroom.where('members', isEqualTo: sortedmemers).get();
+      if (existChatrooom.docs.isNotEmpty) {
+        return existChatrooom.docs.first.id;
+      } else {
+        final chatroomid = await _firestor.collection('rooms').doc().id;
+        Room c = Room(
+          id: chatroomid,
+          createdAt: DateTime.now().toIso8601String(),
+          lastMessage: "",
+          members: sortedmemers,
+          lastMessageTime: DateTime.now().toIso8601String(),
+        );
+        await _firestor.collection('rooms').doc(chatroomid).set(c.toJson());
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Stream<List<Room>> getAllRooms() {
+    return _firestor
+        .collection('rooms')
+        .where('members', arrayContains: myUid)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Room.fromJson(doc.data())).toList());
   }
 }
