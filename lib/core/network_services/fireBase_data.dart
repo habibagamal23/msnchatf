@@ -38,4 +38,54 @@ class FireBaseData {
           .toList();
     });
   }
+
+  Future<String> createRoom(String userId) async {
+    try {
+      CollectionReference chatrooms =
+      FirebaseFirestore.instance.collection('rooms');
+
+      final sortedMembers = [myUid, userId]..sort((a, b) => a.compareTo(b));
+
+      QuerySnapshot existingChatrooms = await chatrooms
+          .where(
+        'members',
+        isEqualTo: sortedMembers,
+      )
+          .get();
+
+      if (existingChatrooms.docs.isNotEmpty) {
+        return existingChatrooms.docs.first.id;
+      } else {
+        final chatroomId =
+            _firestore.collection('rooms').doc().id; // Generate a unique ID
+
+        Room c = Room(
+          id: chatroomId,
+          createdAt: DateTime.now().toIso8601String(),
+          lastMessage: "",
+          lastMessageTime: DateTime.now().toIso8601String(),
+          members: sortedMembers,
+        );
+
+        await FirebaseFirestore.instance
+            .collection("rooms")
+            .doc(chatroomId)
+            .set(c.toJson());
+
+        return chatroomId;
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Stream<List<Room>> getAllChats() {
+    return _firestore
+        .collection('rooms')
+        .where('members', arrayContains: myUid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+        .map((doc) => Room.fromJson(doc.data() as Map<String, dynamic>))
+        .toList());
+  }
 }

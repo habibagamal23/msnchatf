@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/network_services/fireBase_data.dart';
 import 'core/utils/routes.dart';
 import 'features/home/logic/logic_users/users_cubit.dart';
+import 'features/home/logic/rooms_cubit/rooms_cubit.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -21,6 +22,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
+          BlocProvider<RoomsCubit>(
+            create: (context) => RoomsCubit(FireBaseData()),
+          ),
           BlocProvider<UsersCubit>(
             create: (context) => UsersCubit(FireBaseData()),
           ),
