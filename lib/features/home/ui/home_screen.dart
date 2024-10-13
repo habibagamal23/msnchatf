@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -45,14 +46,12 @@ class HomeScreen extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: ColorsManager.mainBlue,
-          onPressed: () {
-            Navigator.pushNamed(context, Routes.selectUserScreen);
-          },
+          onPressed: () {},
           child: const Icon(
             Icons.chat,
             color: ColorsManager.whitebeg,
           ),
         ),
-        body: Center(child: Text("Home")));
+        body: Text("home"));
   }
 }
