@@ -80,10 +80,9 @@ class HomeScreen extends StatelessWidget {
                   final otherUserId = chatRoom.members.firstWhere(
                     (id) => id != FireBaseData().myUid,
                     orElse: () =>
-                        'Unknown', // Provide a fallback value if no other user is found
+                        'Unknown',
                   );
 
-                  // Fetch the user profile from the cached users in HomeCubit
                   final userProfile =
                       context.read<RoomsCubit>().getUserProfile(otherUserId);
 

@@ -76,34 +76,29 @@ class FirebaseService {
   Future<User?> loginWithGoogle() async {
     try {
       await _googleSignIn.signOut();
-      // Trigger the Google sign-in process
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) {
         print("User canceled Google sign-in");
-        return null; // User canceled the Google sign-in
+        return null;
       }
 
-      // Obtain authentication from the Google account
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
-      // Create a credential using the Google account's authentication tokens
       final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
         accessToken: googleAuth.accessToken,
       );
 
-      // Sign in to Firebase using the Google credentials
       final userCredential = await _auth.signInWithCredential(credential);
 
       print("Google sign-in successful: ${userCredential.user?.email}");
 
-      return userCredential.user; // Return the signed-in user
+      return userCredential.user;
     } catch (e) {
-      // Print a detailed error message if Google sign-in fails
       print('Google login error: $e');
-      return null; // Return null to indicate login failure
+      return null;
     }
   }
 
@@ -134,8 +129,7 @@ class FirebaseService {
             id: user.uid,
             name: user.displayName ?? "New User",
             email: user.email ?? "",
-            phoneNumber:
-                "from gooogle",
+            phoneNumber: "from gooogle",
             createdAt: DateTime.now().toIso8601String(),
             about: "I'm a new user",
             online: true,

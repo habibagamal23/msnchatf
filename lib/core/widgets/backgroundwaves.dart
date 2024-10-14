@@ -23,7 +23,6 @@ class CustomBackground extends StatelessWidget {
             fit: BoxFit.contain,
             width: 200,
             height: 100,
-            // Adjust height as needed
           ),
         ),
 

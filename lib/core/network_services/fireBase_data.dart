@@ -34,7 +34,7 @@ class FireBaseData {
       return snapshot.docs
           .map(
               (doc) => UserProfile.fromJson(doc.data() as Map<String, dynamic>))
-          .where((user) => user.id != myUid) // Exclude the current user
+          .where((user) => user.id != myUid)
           .toList();
     });
   }
@@ -42,22 +42,21 @@ class FireBaseData {
   Future<String> createRoom(String userId) async {
     try {
       CollectionReference chatrooms =
-      FirebaseFirestore.instance.collection('rooms');
+          FirebaseFirestore.instance.collection('rooms');
 
       final sortedMembers = [myUid, userId]..sort((a, b) => a.compareTo(b));
 
       QuerySnapshot existingChatrooms = await chatrooms
           .where(
-        'members',
-        isEqualTo: sortedMembers,
-      )
+            'members',
+            isEqualTo: sortedMembers,
+          )
           .get();
 
       if (existingChatrooms.docs.isNotEmpty) {
         return existingChatrooms.docs.first.id;
       } else {
-        final chatroomId =
-            _firestore.collection('rooms').doc().id; // Generate a unique ID
+        final chatroomId = _firestore.collection('rooms').doc().id;
 
         Room c = Room(
           id: chatroomId,
@@ -85,7 +84,7 @@ class FireBaseData {
         .where('members', arrayContains: myUid)
         .snapshots()
         .map((snapshot) => snapshot.docs
-        .map((doc) => Room.fromJson(doc.data() as Map<String, dynamic>))
-        .toList());
+            .map((doc) => Room.fromJson(doc.data() as Map<String, dynamic>))
+            .toList());
   }
 }

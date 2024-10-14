@@ -13,7 +13,6 @@ class Room {
     required this.createdAt,
   });
 
-  // Create a Room object from Firestore JSON data
   factory Room.fromJson(Map<String, dynamic> json) {
     return Room(
       id: json['id'] as String,
@@ -24,7 +23,6 @@ class Room {
     );
   }
 
-  // Convert Room object to JSON for Firestore
   Map<String, dynamic> toJson() {
     return {
       'id': id,

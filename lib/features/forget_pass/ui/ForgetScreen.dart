@@ -50,7 +50,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                               color: Colors.white),
                           onPressed: () {
                             Navigator.of(context)
-                                .pop(); // Navigate back to the previous screen
+                                .pop();
                           },
                         ),
                       ),
@@ -79,11 +79,11 @@ class ForgetPasswordScreen extends StatelessWidget {
 
                             // Email Form
                             Form(
-                              key: cubit.formKey, // Use cubit here
+                              key: cubit.formKey,
                               child: AppTextFormField(
                                 hintText: 'Email',
                                 controller: cubit
-                                    .emailController, // Use cubit's email controller
+                                    .emailController,
                                 validator: (value) {
                                   if (value == null || !value.contains('@')) {
                                     return 'Please enter a valid email';
