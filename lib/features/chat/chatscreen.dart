@@ -22,38 +22,13 @@ class ChatScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         child: Column(
           children: [
-            Expanded(
-              child: BlocBuilder<MessageCubit, MessageState>(
-                builder: (context, state) {
-                  if (state is MessagesLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is MessagesLoaded) {
-                    return ListView.builder(
-                      reverse: true,
-                      itemCount: state.messages.length,
-                      itemBuilder: (context, index) {
-                        final messageItem = state.messages[index];
-                        return ChatMessageCard(messageItem: messageItem);
-                      },
-                    );
-                  } else if (state is MessageInitial) {
-                    return Center(child: Text("Chat with me"));
-                  } else if (state is MessagesError) {
-                    return Center(child: Text('Error: ${state.error}'));
-                  } else {
-                    return const Center(child: Text("No messages yet."));
-                  }
-                },
-              ),
-            ),
+           Expanded(child: Container()),
             Row(
               children: [
                 Expanded(
                   child: Card(
                     child: TextField(
-                      controller:
-                          context.read<MessageCubit>().messageController,
-                      maxLines: 5,
+                    maxLines: 5,
                       minLines: 1,
                       decoration: InputDecoration(
                         suffixIcon: Row(
@@ -77,17 +52,7 @@ class ChatScreen extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {
-                    final messageText =
-                        context.read<MessageCubit>().messageController.text;
-                    if (messageText.isNotEmpty) {
-                      context.read<MessageCubit>().sendMessage(
-                            toId: userProfile.id,
-                          );
-                    }
-
-                    context.read<MessageCubit>().messageController.clear();
-                  },
+                  onPressed: (){},
                   icon: const Icon(Icons.send),
                 ),
               ],

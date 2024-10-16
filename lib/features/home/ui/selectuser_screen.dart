@@ -86,7 +86,7 @@ class CardSelectedUsers extends StatelessWidget {
         tileColor: ColorsManager.mainBlue,
         selectedTileColor: ColorsManager.lightblue,
         onTap: () {
-          context.read<RoomsCubit>().createRoom(userProfile.id);
+          context.read<RoomsCubit>().creatrooms(userProfile.id);
           Navigator.pop(context);
         },
       ),

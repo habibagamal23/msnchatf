@@ -27,8 +27,7 @@ class MyApp extends StatelessWidget {
             create: (context) => UsersCubit(FireBaseData())),
         BlocProvider<RoomsCubit>(
             create: (context) => RoomsCubit(FireBaseData())),
-        BlocProvider<MessageCubit>(
-            create: (context) => MessageCubit(FireBaseData()))
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -18,7 +18,6 @@ class UserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<MessageCubit>().fetchMessages(room.id);
         Navigator.pushNamed(
           context,
           Routes.chatScreen,
