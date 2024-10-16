@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:msnchat/features/chat/message_cubit.dart';
+import '../../features/chat/chatscreen.dart';
 import '../../features/forget_pass/ui/ForgetScreen.dart';
+import '../../features/home/model/user_info.dart';
 import '../../features/home/ui/selectuser_screen.dart';
 import '../../features/home/ui/home_screen.dart';
 import '../../features/login/ui/login_screen.dart';
 import '../../features/onboarding/ui/onboarding_screen.dart';
 import '../../features/register/ui/signup_screen.dart';
 import '../../features/splash/splash_screeen.dart';
+import '../network_services/fireBase_data.dart';
 
 class Routes {
   static const String splashScreen = '/splashscreen';
@@ -14,8 +19,8 @@ class Routes {
   static const String signUpScreen = '/signUpScreen';
   static const String homeScreen = '/homeScreen';
   static const String forgetpass = '/forgetpass';
-  static const String selectUserScreen ='/SelectUserScreen';
-
+  static const String selectUserScreen = '/SelectUserScreen';
+  static const String chatScreen = '/chatscreen';
 }
 
 class AppRouter {
@@ -46,6 +51,11 @@ class AppRouter {
       case Routes.selectUserScreen:
         return MaterialPageRoute(
           builder: (_) => SelectUserScreen(),
+        );
+      case Routes.chatScreen:
+        final userProfile = settings.arguments as UserProfile;
+        return MaterialPageRoute(
+          builder: (_) => ChatScreen(userProfile: userProfile),
         );
       default:
         return MaterialPageRoute(

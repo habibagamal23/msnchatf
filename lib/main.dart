@@ -5,6 +5,7 @@ import 'package:msnchat/features/home/logic_user/logic_rooms/rooms_cubit.dart';
 import 'package:msnchat/features/home/logic_user/users_cubit.dart';
 import 'core/network_services/fireBase_data.dart';
 import 'core/utils/routes.dart';
+import 'features/chat/message_cubit.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
             create: (context) => UsersCubit(FireBaseData())),
         BlocProvider<RoomsCubit>(
             create: (context) => RoomsCubit(FireBaseData())),
-
+        BlocProvider<MessageCubit>(
+            create: (context) => MessageCubit(FireBaseData()))
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
