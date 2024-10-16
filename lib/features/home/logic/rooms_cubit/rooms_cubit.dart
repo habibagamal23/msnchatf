@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-
 import '../../../../core/network_services/fireBase_data.dart';
 import '../../../register/model/user_info.dart';
 import '../../model/roomModel.dart';
@@ -14,7 +12,7 @@ class RoomsCubit extends Cubit<RoomsState> {
 
   RoomsCubit(this._firebaseService) : super(RoomsInitial());
 
-  final myUid = FireBaseData().myUid;
+  final String myUid = FireBaseData().myUid;
 
   StreamSubscription<List<Room>>? _chatRoomsSubscription;
   StreamSubscription<List<UserProfile>>? _usersSubscription;
@@ -26,14 +24,19 @@ class RoomsCubit extends Cubit<RoomsState> {
     try {
       _usersSubscription = _firebaseService.fetchAllUsers().listen((users) {
         _cachedUsers = users;
-        print('Fetched users: ${_cachedUsers.map((user) => user.id).toList()}');
-        _chatRoomsSubscription = _firebaseService.getAllChats().listen((rooms) {
-          emit(HomeLoaded(rooms));
-        });
+        fetchChatRooms();
       });
     } catch (e) {
-      emit(HomeError('Error fetching data: $e'));
+      emit(HomeError('Error fetching users: $e'));
     }
+  }
+
+  void fetchChatRooms() {
+    _chatRoomsSubscription = _firebaseService.getAllChats().listen((rooms) {
+      emit(HomeLoaded(rooms));
+    }, onError: (e) {
+      emit(HomeError('Error fetching chat rooms: $e'));
+    });
   }
 
   Future<void> createRoom(String userId) async {
@@ -42,31 +45,29 @@ class RoomsCubit extends Cubit<RoomsState> {
       final roomId = await _firebaseService.createRoom(userId);
       emit(ChatRoomCreated(roomId));
     } catch (e) {
-      print('Error creating room: $e');
-      emit(HomeError(e.toString()));
+      emit(HomeError('Error creating room: $e'));
     }
   }
 
   UserProfile? getUserProfile(String userId) {
-    try {
-      return _cachedUsers.firstWhere(
-        (user) => user.id == userId,
-        orElse: () => UserProfile(
-          id: "",
-          name: "Unknown User",
-          email: "",
-          about: "",
-          phoneNumber: "",
-          createdAt: "",
-          lastActivated: "",
-          pushToken: "",
-          online: false,
-        ),
-      );
-    } catch (e) {
-      print('User not found: $userId');
-      return null;
-    }
+    return _cachedUsers.firstWhere(
+      (user) => user.id == userId,
+      orElse: () => _defaultUnknownUser(),
+    );
+  }
+
+  UserProfile _defaultUnknownUser() {
+    return UserProfile(
+      id: "",
+      name: "Unknown User",
+      email: "",
+      about: "",
+      phoneNumber: "",
+      createdAt: "",
+      lastActivated: "",
+      pushToken: "",
+      online: false,
+    );
   }
 
   @override

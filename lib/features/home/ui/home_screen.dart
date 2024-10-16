@@ -15,51 +15,8 @@ class HomeScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => RoomsCubit(FireBaseData())..fetchAllData(),
       child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.settings,
-                color: ColorsManager.mainBlue,
-              )),
-          toolbarHeight: 80,
-          title: const Text(
-            "Chats Screen",
-            style: TextStyle(
-                color: ColorsManager.mainBlue,
-                fontSize: 30,
-                fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.logout,
-                color: ColorsManager.mainBlue,
-              ),
-              onPressed: () async {
-                await FirebaseService().logout();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  Routes.loginScreen,
-                  (route) => false,
-                );
-              },
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: ColorsManager.mainBlue,
-          onPressed: () {
-            context.read<UsersCubit>().fetchAllUsers();
-            Navigator.pushNamed(context, Routes.selectUserScreen);
-          },
-          child: const Icon(
-            Icons.chat,
-            color: ColorsManager.whitebeg,
-          ),
-        ),
+        appBar: _buildAppBar(context),
+        floatingActionButton: _buildFloatingActionButton(context),
         body: BlocBuilder<RoomsCubit, RoomsState>(
           builder: (context, state) {
             if (state is HomeLoading) {
@@ -75,26 +32,21 @@ class HomeScreen extends StatelessWidget {
                 itemCount: state.rooms.length,
                 itemBuilder: (context, index) {
                   final chatRoom = state.rooms[index];
-
-                  // Safely find the other user in the room
                   final otherUserId = chatRoom.members.firstWhere(
                     (id) => id != FireBaseData().myUid,
-                    orElse: () =>
-                        'Unknown',
+                    orElse: () => 'Unknown',
                   );
-
                   final userProfile =
                       context.read<RoomsCubit>().getUserProfile(otherUserId);
 
                   if (otherUserId == 'Unknown' || userProfile == null) {
-                    return ListTile(
-                      leading: const Icon(Icons.person),
-                      title: const Text('No other user found'),
-                      subtitle: const Text('Room contains only your ID'),
-                    );
+                    return _buildNoUserFoundTile();
                   }
 
-                  return UserCard(userProfile: userProfile);
+                  return UserCard(
+                    userProfile: userProfile,
+                    room: chatRoom,
+                  );
                 },
               );
             }
@@ -107,6 +59,58 @@ class HomeScreen extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      leading: IconButton(
+        onPressed: () {},
+        icon: const Icon(Icons.settings, color: ColorsManager.mainBlue),
+      ),
+      toolbarHeight: 80,
+      title: const Text(
+        "Chats Screen",
+        style: TextStyle(
+          color: ColorsManager.mainBlue,
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      centerTitle: true,
+      automaticallyImplyLeading: false,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.logout, color: ColorsManager.mainBlue),
+          onPressed: () async {
+            await FirebaseService().logout();
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              Routes.loginScreen,
+              (route) => false,
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  FloatingActionButton _buildFloatingActionButton(BuildContext context) {
+    return FloatingActionButton(
+      backgroundColor: ColorsManager.mainBlue,
+      onPressed: () {
+        context.read<UsersCubit>().fetchAllUsers();
+        Navigator.pushNamed(context, Routes.selectUserScreen);
+      },
+      child: const Icon(Icons.chat, color: ColorsManager.whitebeg),
+    );
+  }
+
+  Widget _buildNoUserFoundTile() {
+    return const ListTile(
+      leading: Icon(Icons.person),
+      title: Text('No other user found'),
+      subtitle: Text('Room contains only your ID'),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/network_services/fireBase_data.dart';
 import 'core/utils/routes.dart';
+import 'features/chat/logic/messages_cubit.dart';
 import 'features/home/logic/logic_users/users_cubit.dart';
 import 'features/home/logic/rooms_cubit/rooms_cubit.dart';
 import 'firebase_options.dart';

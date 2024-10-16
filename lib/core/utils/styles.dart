@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ColorsManager {
   static const Color mainBlue = Color(0xFF005683);
@@ -8,6 +9,33 @@ class ColorsManager {
   static const Color blue = Color(0xFFABE0F5);
   static const Color attenion = Color(0xFFFF3A45);
   static const Color whitebeg = Color(0xFFFDFEFF);
+
+}
+class Styles{
+ static String formatLastMessageTime(String lastMessageTime) {
+    DateTime lastMessageDateTime = DateTime.parse(lastMessageTime);
+    DateTime now = DateTime.now();
+    if (now.difference(lastMessageDateTime).inDays == 0) {
+      return DateFormat.jm().format(lastMessageDateTime);
+    } else {
+      return DateFormat('MMM dd, yyyy').format(lastMessageDateTime);
+    }
+  }
+
+  static String getLastActiveTime(String lastActivated) {
+    final DateTime lastActiveDate = DateTime.parse(lastActivated);
+    final DateTime now = DateTime.now();
+    final DateFormat timeFormat = DateFormat.jm();
+    final DateFormat dateFormat = DateFormat('MMM d, h:mm a');
+    if (lastActiveDate.year == now.year &&
+    lastActiveDate.month == now.month &&
+        lastActiveDate.day == now.day  ) {
+      return 'Today at ${timeFormat.format(lastActiveDate)}';
+    } else {
+      return dateFormat.format(lastActiveDate);
+    }
+  }
+
 }
 
 class AppThemes {

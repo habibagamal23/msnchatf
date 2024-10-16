@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:msnchat/features/chat/ui/chatScreen.dart';
 import '../../features/forget_pass/ui/ForgetScreen.dart';
 import '../../features/home/ui/alluserscreen.dart';
 import '../../features/home/ui/home_screen.dart';
@@ -14,8 +15,8 @@ class Routes {
   static const String signUpScreen = '/signUpScreen';
   static const String homeScreen = '/homeScreen';
   static const String forgetpass = '/forgetpass';
-  static const String selectUserScreen ='/SelectUserScreen';
-
+  static const String selectUserScreen = '/SelectUserScreen';
+  static const String Chatscreen = '/ChatScreen';
 }
 
 class AppRouter {
@@ -46,6 +47,14 @@ class AppRouter {
       case Routes.selectUserScreen:
         return MaterialPageRoute(
           builder: (_) => SelectUserScreen(),
+        );
+      case Routes.Chatscreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (_) => ChatScreen(
+            userProfile: args['userProfile'],
+            idroom: args['idroom'],
+          ),
         );
       default:
         return MaterialPageRoute(

@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../../features/home/model/roomModel.dart';
 import '../../features/login/model/login_model.dart';
 import '../../features/register/model/register_model.dart';
 import '../../features/register/model/user_info.dart';
@@ -10,13 +8,15 @@ import 'fireBase_data.dart';
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
+//change
   Future<User?> login(LoginRequestBody loginRequest) async {
     try {
       final userCredential = await _auth.signInWithEmailAndPassword(
         email: loginRequest.email,
         password: loginRequest.password,
       );
+      await FireBaseData().updateUserLastActivated();
+
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
@@ -94,6 +94,7 @@ class FirebaseService {
       final userCredential = await _auth.signInWithCredential(credential);
 
       print("Google sign-in successful: ${userCredential.user?.email}");
+      await FireBaseData().updateUserLastActivated();
 
       return userCredential.user;
     } catch (e) {
@@ -144,12 +145,15 @@ class FirebaseService {
       return null;
     }
   }
-
+//change
   Future<void> logout() async {
     try {
+      await FireBaseData().updateUserOfflineStatus();
+
       if (await _googleSignIn.isSignedIn()) {
         await _googleSignIn.signOut();
       }
+
       await _auth.signOut();
     } catch (e) {
       print('Error logging out: $e');
