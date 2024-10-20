@@ -70,7 +70,8 @@ class FireBaseData {
         .where('members', arrayContains: myUid)
         .snapshots()
         .map((snapshot) =>
-            snapshot.docs.map((doc) => Room.fromJson(doc.data())).toList());
+            snapshot.docs.map((doc) => Room.fromJson(doc.data())).toList()
+              ..sort((a, b) => b.lastMessageTime.compareTo(a.lastMessageTime)));
   }
 
   Future createMessage(String toid, String msg, String roomId) async {
@@ -105,7 +106,30 @@ class FireBaseData {
         .map((snapshot) =>
             snapshot.docs.map((doc) => Message.fromJson(doc.data())).toList());
   }
+/////
+  Future<void> updateUserOfflineStatus() async {
+    try {
+      await _firestor.collection('users').doc(myUid).update({
+        'online': false,
+        'lastActivated': DateTime.now().toIso8601String(),
+      });
+      print('User online status updated to offline');
+    } catch (e) {
+      print('Error updating online status: $e');
+    }
+  }
 
 
-
+///
+  Future<void> updateUserLastActivated() async {
+    try {
+      await _firestor.collection('users').doc(myUid).update({
+        'online': true,
+        'lastActivated': DateTime.now().toIso8601String(),
+      });
+      print('User last activated time updated successfully!');
+    } catch (e) {
+      print('Error updating last activated time: $e');
+    }
+  }
 }
