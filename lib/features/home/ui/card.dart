@@ -69,27 +69,19 @@ class UserCard extends StatelessWidget {
                     ],
                   ),
                   SizedBox(width: 15),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        userProfile.name,
-                        style: TextStyle(
-                          color: ColorsManager.whitebeg,
-                          fontSize: 20, // Increased font size for the name
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 6),
-                      Text(
-                        userProfile.about,
-                        style: TextStyle(
+                  Expanded(
+                    child: _buildUserDetails(),
+                  ),
+                  room?.lastMessage != ''
+                      ? Text(
+                          Styles.formatLastMessageTime(room!.lastMessageTime),
+                          style: TextStyle(
                             color: Colors.grey[400],
                             fontSize: 15,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ],
-                  ),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             ),
@@ -102,6 +94,40 @@ class UserCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildUserDetails() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          userProfile.name,
+          style: const TextStyle(
+            color: ColorsManager.whitebeg,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 6),
+        room?.lastMessage != ''
+            ? Text(
+                room!.lastMessage,
+                style: TextStyle(
+                  color: Colors.grey[400],
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            : Text(
+                userProfile.about,
+                style: TextStyle(
+                  color: Colors.grey[400],
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+      ],
     );
   }
 }

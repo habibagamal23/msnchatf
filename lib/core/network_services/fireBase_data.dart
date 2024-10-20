@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../features/chat/message_model.dart';
 import '../../features/home/model/roomModel.dart';
@@ -73,15 +76,15 @@ class FireBaseData {
             snapshot.docs.map((doc) => Room.fromJson(doc.data())).toList()
               ..sort((a, b) => b.lastMessageTime.compareTo(a.lastMessageTime)));
   }
-
-  Future createMessage(String toid, String msg, String roomId) async {
+//change
+  Future createMessage(String toid, String msg, String roomId ,  {required String type}) async {
     final msgId = _firestor.collection('messages').doc().id;
     Message message = Message(
       id: msgId,
       toId: toid,
       fromId: myUid,
       msg: msg,
-      type: 'text',
+      type: type,
       createdAt: DateTime.now().toString(),
       read: false,
     );
@@ -111,7 +114,7 @@ class FireBaseData {
     try {
       await _firestor.collection('users').doc(myUid).update({
         'online': false,
-        'lastActivated': DateTime.now().toIso8601String(),
+        'last_activated': DateTime.now().toIso8601String(),
       });
       print('User online status updated to offline');
     } catch (e) {
@@ -125,11 +128,28 @@ class FireBaseData {
     try {
       await _firestor.collection('users').doc(myUid).update({
         'online': true,
-        'lastActivated': DateTime.now().toIso8601String(),
+        'last_activated': DateTime.now().toIso8601String(),
       });
       print('User last activated time updated successfully!');
     } catch (e) {
       print('Error updating last activated time: $e');
     }
+  }
+
+
+  /// storage
+///
+  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+
+  Future<String> uploadImage(File file, String roomId) async {
+    String ext = file.path.split('.').last;
+    print("firestorgae");
+    final ref = _firebaseStorage
+        .ref()
+        .child('images/$roomId/${DateTime.now().millisecondsSinceEpoch}.$ext');
+
+    await ref.putFile(file);
+    print("image path : ${ref.getDownloadURL()}");
+    return await ref.getDownloadURL();
   }
 }

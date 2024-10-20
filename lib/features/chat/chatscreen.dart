@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:msnchat/core/utils/styles.dart';
 import 'package:msnchat/features/chat/message_cubit.dart';
@@ -16,8 +19,34 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-        appBar: _buildAppBar(context),
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 80,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              userProfile.name,
+              style: const TextStyle(
+                color: ColorsManager.mainBlue,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              "Last Seen ${Styles.getLastActiveTime(userProfile.lastActivated)}",
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+          ],
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.accessibility_new_outlined,
+                color: ColorsManager.mainBlue),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         child: Column(
@@ -61,7 +90,19 @@ class ChatScreen extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                final ImagePicker picker = ImagePicker();
+                                final XFile? image = await picker.pickImage(
+                                    source: ImageSource.camera);
+
+                                if (image != null) {
+                                  File file = File(image.path);
+                                  print("choose image ");
+                                  await context
+                                      .read<MessageCubit>()
+                                      .sendImage(file, userProfile.id);
+                                }
+                              },
                               icon: const Icon(Icons.camera),
                             ),
                           ],
@@ -81,12 +122,12 @@ class ChatScreen extends StatelessWidget {
                     final messageText =
                         context.read<MessageCubit>().messageController.text;
                     if (messageText.isNotEmpty) {
-                      context.read<MessageCubit>().sendMessage(
-                            toId: userProfile.id,
-                          );
+                      context
+                          .read<MessageCubit>()
+                          .sendMessage(toId: userProfile.id, type: 'text');
                     }
-
-                    context.read<MessageCubit>().messageController.clear();
+                    context
+                        .read<MessageCubit>().messageController.clear();
                   },
                   icon: const Icon(Icons.send),
                 ),
@@ -97,6 +138,8 @@ class ChatScreen extends StatelessWidget {
       ),
     );
   }
+
+
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
@@ -127,8 +170,6 @@ class ChatScreen extends StatelessWidget {
       ],
     );
   }
-
-
 }
 
 class ChatMessageCard extends StatelessWidget {
@@ -158,7 +199,16 @@ class ChatMessageCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(messageItem.msg),
+                if (messageItem.type == 'text') ...[
+                  Text(messageItem.msg),
+                ] else if (messageItem.type == 'image') ...[
+                  Image.network(
+                    messageItem.msg,
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  ),
+                ],
                 const SizedBox(height: 5),
                 Text(
                   DateFormat.jm().format(

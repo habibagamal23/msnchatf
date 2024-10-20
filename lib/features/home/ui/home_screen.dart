@@ -18,7 +18,9 @@ class HomeScreen extends StatelessWidget {
     child:  Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+
+            },
             icon: const Icon(
               Icons.settings,
               color: ColorsManager.mainBlue,
@@ -40,6 +42,7 @@ class HomeScreen extends StatelessWidget {
               color: ColorsManager.mainBlue,
             ),
             onPressed: () async {
+              print("log");
               await FirebaseService().logout();
               Navigator.pushNamedAndRemoveUntil(
                 context,
