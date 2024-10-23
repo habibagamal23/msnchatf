@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:msnchat/core/utils/routes.dart';
-import 'package:msnchat/features/chat/message_cubit.dart';
+import 'package:msnchat/features/chat/loggic/messages_cubit.dart';
 
 import '../../../core/utils/styles.dart';
-import '../../chat/chatscreen.dart';
+import '../../chat/ui/chatscreen.dart';
 import '../model/roomModel.dart';
 import '../model/user_info.dart';
 
@@ -18,7 +18,7 @@ class UserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<MessageCubit>().fetchMessages(room.id);
+        context.read<MessagesCubit>().fetchMessages(room.id);
         Navigator.pushNamed(
           context,
           Routes.chatScreen,
@@ -79,6 +79,7 @@ class UserCard extends StatelessWidget {
                             color: Colors.grey[400],
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
+
                           ),
                         )
                       : Container(),
@@ -117,6 +118,7 @@ class UserCard extends StatelessWidget {
                   color: Colors.grey[400],
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
+                    overflow: TextOverflow.ellipsis
                 ),
               )
             : Text(

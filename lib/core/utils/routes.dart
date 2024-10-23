@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:msnchat/features/chat/message_cubit.dart';
-import '../../features/chat/chatscreen.dart';
+import '../../features/chat/ui/chatscreen.dart';
 import '../../features/forget_pass/ui/ForgetScreen.dart';
 import '../../features/home/model/user_info.dart';
 import '../../features/home/ui/selectuser_screen.dart';

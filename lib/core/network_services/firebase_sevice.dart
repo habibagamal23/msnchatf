@@ -17,7 +17,6 @@ class FirebaseService {
         password: loginRequest.password,
       );
       //change here
-      await FireBaseData().updateUserLastActivated();
 
       return userCredential.user;
 
@@ -95,7 +94,6 @@ class FirebaseService {
 
       print("Google sign-in successful: ${userCredential.user?.email}");
       //change
-      await FireBaseData().updateUserLastActivated();
       return userCredential.user;
     } catch (e) {
       print('Google login error: $e');
@@ -149,7 +147,6 @@ class FirebaseService {
   Future<void> logout() async {
     try {
       //change
-      await FireBaseData().updateUserOfflineStatus();
       if (await _googleSignIn.isSignedIn()) {
         await _googleSignIn.signOut();
       }

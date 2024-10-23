@@ -6,11 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:msnchat/core/utils/styles.dart';
-import 'package:msnchat/features/chat/message_cubit.dart';
+import 'package:msnchat/features/chat/loggic/messages_cubit.dart';
 
-import '../../../core/network_services/fireBase_data.dart';
-import '../home/model/user_info.dart';
-import 'message_model.dart';
+import '../../../../core/network_services/fireBase_data.dart';
+import '../../home/model/user_info.dart';
+import '../model/message_model.dart';
 
 class ChatScreen extends StatelessWidget {
   final UserProfile userProfile;
@@ -51,37 +51,78 @@ class ChatScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         child: Column(
           children: [
-            Expanded(
-              child: BlocBuilder<MessageCubit, MessageState>(
+            Expanded(child: BlocBuilder<MessagesCubit, MessagesState>(
                 builder: (context, state) {
-                  if (state is MessagesLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is MessagesLoaded) {
-                    return ListView.builder(
-                      reverse: true,
-                      itemCount: state.messages.length,
-                      itemBuilder: (context, index) {
-                        final messageItem = state.messages[index];
-                        return ChatMessageCard(messageItem: messageItem);
-                      },
-                    );
-                  } else if (state is MessageInitial) {
-                    return Center(child: Text("Chat with me"));
-                  } else if (state is MessagesError) {
-                    return Center(child: Text('Error: ${state.error}'));
-                  } else {
-                    return const Center(child: Text("No messages yet."));
-                  }
-                },
-              ),
-            ),
+              if (state is MessagesLoading) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (state is MessagesSuccess) {
+                return ListView.builder(
+                    reverse: true,
+                    itemCount: state.messages.length,
+                    itemBuilder: (context, index) {
+                      final meg = state.messages[index];
+                      bool isme = meg.fromId == FireBaseData().myUid;
+                      return Align(
+                        alignment:
+                            isme ? Alignment.centerRight : Alignment.centerLeft,
+                        child: Card(
+                          margin: EdgeInsets.all(10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft:
+                                  isme ? Radius.circular(16) : Radius.zero,
+                              bottomRight:
+                                  isme ? Radius.zero : Radius.circular(16),
+                              topLeft: Radius.circular(16),
+                              topRight: Radius.circular(16),
+                            ),
+                          ),
+                          color: isme
+                              ? ColorsManager.blue2
+                              : ColorsManager.lightblue,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                meg.type == "text"
+                                    ? Text(meg.msg)
+                                    : Image.network(
+                                        meg.msg,
+                                        width: 150,
+                                        height: 150,
+                                        fit: BoxFit.cover,
+                                      ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Text(DateFormat.jm()
+                                    .format(DateTime.parse(meg.createdAt))),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    });
+              }
+              if (state is MessagesError) {
+                return Center(
+                  child: Text(state.error),
+                );
+              }
+              return Center(
+                child: Text("get start"),
+              );
+            })),
             Row(
               children: [
                 Expanded(
                   child: Card(
                     child: TextField(
                       controller:
-                          context.read<MessageCubit>().messageController,
+                          context.read<MessagesCubit>().messageContrller,
                       maxLines: 5,
                       minLines: 1,
                       decoration: InputDecoration(
@@ -92,14 +133,13 @@ class ChatScreen extends StatelessWidget {
                             IconButton(
                               onPressed: () async {
                                 final ImagePicker picker = ImagePicker();
-                                final XFile? image = await picker.pickImage(
+                                final XFile? photo = await picker.pickImage(
                                     source: ImageSource.camera);
 
-                                if (image != null) {
-                                  File file = File(image.path);
-                                  print("choose image ");
+                                if (photo != null) {
+                                  File file = File(photo.path);
                                   await context
-                                      .read<MessageCubit>()
+                                      .read<MessagesCubit>()
                                       .sendImage(file, userProfile.id);
                                 }
                               },
@@ -119,15 +159,14 @@ class ChatScreen extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    final messageText =
-                        context.read<MessageCubit>().messageController.text;
-                    if (messageText.isNotEmpty) {
+                    final mes =
+                        context.read<MessagesCubit>().messageContrller.text;
+                    if (mes.isNotEmpty) {
                       context
-                          .read<MessageCubit>()
-                          .sendMessage(toId: userProfile.id, type: 'text');
+                          .read<MessagesCubit>()
+                          .sendMessage(userProfile.id, "text");
                     }
-                    context
-                        .read<MessageCubit>().messageController.clear();
+                    context.read<MessagesCubit>().messageContrller.clear();
                   },
                   icon: const Icon(Icons.send),
                 ),
@@ -138,8 +177,6 @@ class ChatScreen extends StatelessWidget {
       ),
     );
   }
-
-
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
