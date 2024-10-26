@@ -31,47 +31,49 @@ class FireBaseData {
 
   // Function to obtain access token for FCM
   static Future<String> getAccessToken() async {
-    final Map<String, String> serviceAccountJson = {
-      "type": "service_account",
-      "project_id": "msnchat-bd802",
-      "private_key_id": "e3dcb88a9f36489b317fc936f058c6d4e9f5200e",
-      "private_key":
-          "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC+Gpr208EDpAYU\ngbEzMQ0+TkMb54Q2cmitY31mLZJqSFh7hfaFeCN1hV5CYBG8umV+eG10OtMbVXmd\nX0x6CcK5vVN3k+UHuewssgoZBQier0TTmyWEuKzk6PbassaNPJswmumbwvl0DvQE\nNFG2a9lJK/IizQSf8D8UFxVtyqPaJ+IlyQhPu/DfS67nFUOCmFCSOuCa/LWzH7fT\nJHJ+RnzQmBYJIgZnpeW+XeWE25t28M1udYY1Zltce9x/j5VA3bfs8R7IFkEtk3rr\n58gEYdgeDby33qf3/ia6GqKMbTmOSAzuBa+f8z5TNo7lcVt0JnsX0zqFI4cNfiDA\n/dJFeEMJAgMBAAECggEAE0sBsFxd9bPBKrZdUJXRM2IvsR6qRjjO+w7SaIrmNbtd\nIH8gXVwLlDcacXfMwQe1OnQ4HoBEUb03XBNygF2qeZ13Yba8mw/BQml4uSCPxwQA\nYw3XLUytPkeO2vPjDu0oTlLgc76CQMcuOFmDc/UmzoRjXOkL57vy+OPdWMDEp4Rx\nEgF4C5l+uZOuif3w9DIM+0FRjfQapPHeCYOQc7A7WrSRnc9dgIkDNcGkjnydqxqG\ni/sQez+Y0WB/uOiqm6D6siYd0xJOa3Ph3U0ZS8ShtZ5z03B3heLVkpfJbM4UQkM1\nk0OZ5JzvcjiqDZqO9ufh7drfM/UPnFKECiWPv5Gz4QKBgQDrURTVpeUy7QLBIHkH\neRMewZFfwrNeBQcmxm2+iI4ToW//D+COvoUJ63ku9Hq+YjHoVz7cfTzYtjPtdT7s\nL+MoNS/r47ifybCTzUe906IizEH1DPgHyULhjsuB0gC7k7jXFnoKL29m8AYf9r74\nLPiEijA3dQTY3O/x33c0ia7oqQKBgQDO0C4KPKlCOSXnTEzhYkDdG05kGNUdO0Vi\nPvQMGyUA0SEQBq8+F+4a+GSUEntAgE11uae35733rbY1M3SL7/6YWpLOJcdgYXRl\nblkyGsYlhF2DiQmzcBjuhaA3I+A5NCVmD55E7E80Udcrfi6ncdnuk6YZOaZUfmzF\nDVBKvCsjYQKBgQClZpN/bKECv6dM+jc38nlnB+XX6nHLJzuUnKrs3u0GjVW8cXuE\nuhOnGlVOlNdl1H2B8zkjIABRzxgG03+L4kkHrQLnCmRuJAUyjnrbydLQJMRDq373\nchbJlmYi9OpA7p9gx9K2MAtczl9vvi8TIAD6oGstv9nNWNZrK4iNbC1+KQKBgA16\nVbXHFETDkqvLNituCsoeEHLHh4P7K99mOONdFYFDH8N6nAsQ5iyNyYg42B1w/xtP\n+RUsHh45DOnUq6C/CDmHlY+nuKGYWEyP73IreoRRZwK+eIpgIM/Sl4lgZil0M4e+\nNtNJDzRarQohlArHiatZpfZ44lUZVB9XacclEi6hAoGBAJMxEoYoBALpQpxm3dqb\nkewO1fPPAAKcH8SkYedaPnztlypfXXTFyVuRHMKFwy8E8fveZdfi49nmlZCGs0pH\nzg8KetB52yG38QD/S7S3/iIGuRJad7QQJ8nQNnR+Y9yXCiG6ZFr+WFvSZjwQ8Igi\nUSdlAJvLkrdJEteJDXt4cMvP\n-----END PRIVATE KEY-----\n",
-      "client_email": "chattestme@msnchat-bd802.iam.gserviceaccount.com",
-      "client_id": "111238606383783458001",
-      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-      "token_uri": "https://oauth2.googleapis.com/token",
-      "auth_provider_x509_cert_url":
-          "https://www.googleapis.com/oauth2/v1/certs",
-      "client_x509_cert_url":
-          "https://www.googleapis.com/robot/v1/metadata/x509/chattestme%40msnchat-bd802.iam.gserviceaccount.com",
-      "universe_domain": "googleapis.com"
-    };
+    // final Map<String, String> serviceAccountJson = {
+    //   "type": "service_account",
+    //   "project_id": "msnchat-bd802",
+    //   "private_key_id": "e3dcb88a9f36489b317fc936f058c6d4e9f5200e",
+    //   "private_key":
+    //       "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC+Gpr208EDpAYU\ngbEzMQ0+TkMb54Q2cmitY31mLZJqSFh7hfaFeCN1hV5CYBG8umV+eG10OtMbVXmd\nX0x6CcK5vVN3k+UHuewssgoZBQier0TTmyWEuKzk6PbassaNPJswmumbwvl0DvQE\nNFG2a9lJK/IizQSf8D8UFxVtyqPaJ+IlyQhPu/DfS67nFUOCmFCSOuCa/LWzH7fT\nJHJ+RnzQmBYJIgZnpeW+XeWE25t28M1udYY1Zltce9x/j5VA3bfs8R7IFkEtk3rr\n58gEYdgeDby33qf3/ia6GqKMbTmOSAzuBa+f8z5TNo7lcVt0JnsX0zqFI4cNfiDA\n/dJFeEMJAgMBAAECggEAE0sBsFxd9bPBKrZdUJXRM2IvsR6qRjjO+w7SaIrmNbtd\nIH8gXVwLlDcacXfMwQe1OnQ4HoBEUb03XBNygF2qeZ13Yba8mw/BQml4uSCPxwQA\nYw3XLUytPkeO2vPjDu0oTlLgc76CQMcuOFmDc/UmzoRjXOkL57vy+OPdWMDEp4Rx\nEgF4C5l+uZOuif3w9DIM+0FRjfQapPHeCYOQc7A7WrSRnc9dgIkDNcGkjnydqxqG\ni/sQez+Y0WB/uOiqm6D6siYd0xJOa3Ph3U0ZS8ShtZ5z03B3heLVkpfJbM4UQkM1\nk0OZ5JzvcjiqDZqO9ufh7drfM/UPnFKECiWPv5Gz4QKBgQDrURTVpeUy7QLBIHkH\neRMewZFfwrNeBQcmxm2+iI4ToW//D+COvoUJ63ku9Hq+YjHoVz7cfTzYtjPtdT7s\nL+MoNS/r47ifybCTzUe906IizEH1DPgHyULhjsuB0gC7k7jXFnoKL29m8AYf9r74\nLPiEijA3dQTY3O/x33c0ia7oqQKBgQDO0C4KPKlCOSXnTEzhYkDdG05kGNUdO0Vi\nPvQMGyUA0SEQBq8+F+4a+GSUEntAgE11uae35733rbY1M3SL7/6YWpLOJcdgYXRl\nblkyGsYlhF2DiQmzcBjuhaA3I+A5NCVmD55E7E80Udcrfi6ncdnuk6YZOaZUfmzF\nDVBKvCsjYQKBgQClZpN/bKECv6dM+jc38nlnB+XX6nHLJzuUnKrs3u0GjVW8cXuE\nuhOnGlVOlNdl1H2B8zkjIABRzxgG03+L4kkHrQLnCmRuJAUyjnrbydLQJMRDq373\nchbJlmYi9OpA7p9gx9K2MAtczl9vvi8TIAD6oGstv9nNWNZrK4iNbC1+KQKBgA16\nVbXHFETDkqvLNituCsoeEHLHh4P7K99mOONdFYFDH8N6nAsQ5iyNyYg42B1w/xtP\n+RUsHh45DOnUq6C/CDmHlY+nuKGYWEyP73IreoRRZwK+eIpgIM/Sl4lgZil0M4e+\nNtNJDzRarQohlArHiatZpfZ44lUZVB9XacclEi6hAoGBAJMxEoYoBALpQpxm3dqb\nkewO1fPPAAKcH8SkYedaPnztlypfXXTFyVuRHMKFwy8E8fveZdfi49nmlZCGs0pH\nzg8KetB52yG38QD/S7S3/iIGuRJad7QQJ8nQNnR+Y9yXCiG6ZFr+WFvSZjwQ8Igi\nUSdlAJvLkrdJEteJDXt4cMvP\n-----END PRIVATE KEY-----\n",
+    //   "client_email": "chattestme@msnchat-bd802.iam.gserviceaccount.com",
+    //   "client_id": "111238606383783458001",
+    //   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    //   "token_uri": "https://oauth2.googleapis.com/token",
+    //   "auth_provider_x509_cert_url":
+    //       "https://www.googleapis.com/oauth2/v1/certs",
+    //   "client_x509_cert_url":
+    //       "https://www.googleapis.com/robot/v1/metadata/x509/chattestme%40msnchat-bd802.iam.gserviceaccount.com",
+    //   "universe_domain": "googleapis.com"
+    // };
+    //
+    // print("___________________________________ ");
+    //
+    // List<String> scopes = <String>[
+    //   "https://www.googleapis.com/auth/userinfo.email",
+    //   "https://www.googleapis.com/auth/firebase.database",
+    //   "https://www.googleapis.com/auth/firebase.messaging",
+    // ];
+    // try {
+    //   http.Client client = await auth.clientViaServiceAccount(
+    //       auth.ServiceAccountCredentials.fromJson(serviceAccountJson), scopes);
+    //   auth.AccessCredentials credentials =
+    //       await auth.obtainAccessCredentialsViaServiceAccount(
+    //     auth.ServiceAccountCredentials.fromJson(serviceAccountJson),
+    //     scopes,
+    //     client,
+    //   );
+    //   print("______________________________________");
+    //   print("Access Token: ${credentials.accessToken.data}");
+    //   client.close();
+    //   return credentials.accessToken.data;
+    // } catch (e) {
+    //   print("Error obtaining access token: $e");
+    //   return "";
+    // }
 
-    print("___________________________________ ");
-
-    List<String> scopes = <String>[
-      "https://www.googleapis.com/auth/userinfo.email",
-      "https://www.googleapis.com/auth/firebase.database",
-      "https://www.googleapis.com/auth/firebase.messaging",
-    ];
-    try {
-      http.Client client = await auth.clientViaServiceAccount(
-          auth.ServiceAccountCredentials.fromJson(serviceAccountJson), scopes);
-      auth.AccessCredentials credentials =
-          await auth.obtainAccessCredentialsViaServiceAccount(
-        auth.ServiceAccountCredentials.fromJson(serviceAccountJson),
-        scopes,
-        client,
-      );
-      print("______________________________________");
-      print("Access Token: ${credentials.accessToken.data}");
-      client.close();
-      return credentials.accessToken.data;
-    } catch (e) {
-      print("Error obtaining access token: $e");
-      return "";
-    }
+    return "";
   }
 
   // Get device token for push notifications

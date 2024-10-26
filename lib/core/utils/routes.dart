@@ -12,6 +12,9 @@ import '../../features/splash/splash_screeen.dart';
 import '../network_services/fireBase_data.dart';
 
 class Routes {
+  static const int appid = 1665549424;
+  static const String appsign = 'afc040870791011032668944b0858406cd64a38ac70076af4e5be1691dbc0c32';
+
   static const String splashScreen = '/splashscreen';
   static const String onBoardingScreen = '/onBoardingScreen';
   static const String loginScreen = '/loginScreen';

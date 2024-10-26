@@ -11,6 +11,7 @@ import 'package:msnchat/features/chat/loggic/messages_cubit.dart';
 import '../../../../core/network_services/fireBase_data.dart';
 import '../../home/model/user_info.dart';
 import '../model/message_model.dart';
+import 'callpage.dart';
 
 class ChatScreen extends StatelessWidget {
   final UserProfile userProfile;
@@ -41,7 +42,16 @@ class ChatScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CallPage(
+                            userID: userProfile.id,
+                            userName: userProfile.name,
+                            callID: context.read<MessagesCubit>().roommyId,
+                          )));
+            },
             icon: const Icon(Icons.accessibility_new_outlined,
                 color: ColorsManager.mainBlue),
           ),
