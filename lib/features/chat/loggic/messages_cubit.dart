@@ -35,7 +35,6 @@ class MessagesCubit extends Cubit<MessagesState> {
         String msg = (type == "text") ? messageContrller.text : imgURl!;
         await fireBaseData.createMessage(toid, msg, roommyId, type);
       }
-
       await fetchMessages(roommyId);
     } catch (e) {
       emit(MessagesError(e.toString()));

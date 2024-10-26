@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import '../../core/network_services/fireBase_data.dart';
 import '../../core/sharedprefrance/sharedprefrace.dart';
 import '../../core/utils/routes.dart';
 
@@ -15,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _navigateBasedOnAuth();
-  }
+}
 
   Future<void> _navigateBasedOnAuth() async {
     await Future.delayed(const Duration(seconds: 2));
