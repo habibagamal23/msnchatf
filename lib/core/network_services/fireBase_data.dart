@@ -7,20 +7,34 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../../features/chat/model/message_model.dart';
 import '../../features/home/model/roomModel.dart';
 import '../../features/home/model/user_info.dart';
+import 'notifcations.dart';
 
 class FireBaseData {
   final FirebaseFirestore _firestor = FirebaseFirestore.instance;
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
   String get myUid => _firebaseAuth.currentUser!.uid;
 
+  // 1-  update user push token in Firestore
+  Future<void> updateUserToken(String userId) async {
+    String? token = await Nofifcation().getDevicesToken();
+    if (token != null) {
+      await _firestor.collection('users').doc(userId).update({
+        'push_token': token,
+      });
+    }
+  }
+
+  // 2-  add when create user push token  for each user
   Future creatUser(UserProfile userprofil) async {
     try {
+      userprofil.pushToken = await Nofifcation().getDevicesToken() ?? "";
       await _firestor
           .collection('users')
           .doc(userprofil.id)
           .set(userprofil.toJson());
-      print("User secces created ");
+      print("User secces created with push token ");
     } catch (e) {
       print("error when you created user $e");
     }
@@ -77,6 +91,7 @@ class FireBaseData {
               ..sort((a, b) => b.lastMessageTime.compareTo(a.lastMessageTime)));
   }
 
+// 3- when i send message i send also notifction for this user
   Future createMessage(
       String toid, String msg, String roomid, String type) async {
     final msgid = _firestor.collection('messages').doc().id;
@@ -96,43 +111,36 @@ class FireBaseData {
 
     await myroom.update(
         {'last_message': message.msg, 'last_message_time': message.createdAt});
+
+    DocumentSnapshot user =
+        await _firestor.collection('users').doc(message.toId).get();
+    String pushtokent = user.get('push_token');
+    String username = user.get('name');
+
+    if (pushtokent != null && pushtokent.isNotEmpty) {
+      await Nofifcation().senNotifaction(message.msg, username, pushtokent);
+    }
   }
 
   Stream<List<Message>> getMessages(String roomid) {
     return _firestor
         .collection('rooms')
         .doc(roomid)
-        .collection('messages').orderBy('created_at', descending: true)
+        .collection('messages')
+        .orderBy('created_at', descending: true)
         .snapshots()
         .map((snapshot) =>
             snapshot.docs.map((doc) => Message.fromJson(doc.data())).toList());
   }
 
-
-
-  
-FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-  
-  
-  Future imageSorge(File file , String roomid ) async{
-
+  Future imageSorge(File file, String roomid) async {
     String ext = file.path.split('.').last;
     // this is path
-    final ref = firebaseStorage.ref()
-        .child('images/$roomid/'
+    final ref = firebaseStorage.ref().child('images/$roomid/'
         '${DateTime.now().microsecondsSinceEpoch}.$ext');
 
     await ref.putFile(file);
 
     return await ref.getDownloadURL();
-    
   }
-
-
-
-
-
-  
-
-
 }
